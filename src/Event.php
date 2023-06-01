@@ -7,12 +7,18 @@ use JsonSerializable;
 class Event implements JsonSerializable
 {
     const END_MESSAGE  = "\n";
-    const FIELDS = ['event', 'data', 'retry', 'id'];
+    const FIELDS = ['id', 'event', 'retry', 'data'];
 
-    public function __construct(
-        protected string $field,
-        protected array|string $data
-    ) {
+    protected string $event;
+    protected mixed $data;
+    protected int $retry;
+    protected int $id;
+
+    public function __construct(array $data = [])
+    {
+        foreach ($data as $key => $val) {
+            $this->{$key} = $val;
+        }
     }
 
     public function __get(string $prop)
@@ -22,28 +28,76 @@ class Event implements JsonSerializable
         }
     }
 
+    public function toArray(): array
+    {
+        $arr = [];
+        foreach (self::FIELDS as $field) {
+            if (isset($this->{$field})) {
+                $arr[$field] = $this->{$field};
+            }
+        }
+        return $arr;
+    }
+
     public function __serialize(): array
     {
-        return [
-            'field' => $this->field,
-            'data' => $this->data,
-        ];
+        return $this->toArray();
     }
 
     public function __unserialize(array $data): void
     {
-        $this->field = $data['field'];
+        $this->event = $data['event'];
+        $this->id = $data['id'];
+        $this->retry = $data['retry'];
         $this->data = $data['data'];
     }
 
     public function __toString()
     {
-        $dataString = is_array($this->data) ? 'data: ' . json_encode($this->data) :
-            implode(self::END_MESSAGE, array_map(fn ($i) => "data: $i", explode(self::END_MESSAGE, $this->data)));
-        return <<<EOT
-        event: {$this->field}
-        $dataString
-        EOT;
+        $lines = [];
+        foreach ($this->toArray() as $field => $val) {
+            if ($field === 'data') {
+                foreach ($this->getData() as $data) {
+                    $lines[] = "data: $data";
+                }
+            } else if ($val = $this->{$field}) {
+                $lines[] = "$field: $val";
+            }
+        }
+        return implode(self::END_MESSAGE, $lines);
+    }
+
+    public function event(string $event): self
+    {
+        $this->event = $event;
+        return $this;
+    }
+
+    public function data(mixed $data): self
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    public function id(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function retry(int $retry): self
+    {
+        $this->retry = $retry;
+        return $this;
+    }
+
+    public function getData(): array
+    {
+        if (is_array($this->data)) {
+            return [json_encode($this->data)];
+        }
+
+        return explode(self::END_MESSAGE, $this->data);
     }
 
     public function field()
@@ -54,9 +108,8 @@ class Event implements JsonSerializable
     public static function fromString(string $string): self
     {
         $event = self::parseEventString($string);
-        $field = $event[array_key_first($event)];
-        $data = json_decode($event['data'], true) ?? $event['data'];
-        return new self($field, $data);
+        $event['data'] = json_decode($event['data'], true) ?? $event['data'];
+        return new self($event);
     }
 
     public static function parseEventString(string $string): array
@@ -99,9 +152,6 @@ class Event implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return [
-            'field' => $this->field,
-            'data' => $this->data,
-        ];
+        return $this->toArray();
     }
 }
