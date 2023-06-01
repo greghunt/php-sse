@@ -3,6 +3,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use GregHunt\ServerSentEvents\ServerSentEvents;
+use GregHunt\ServerSentEvents\Event;
 
 header("Content-Type: text/plain");
 $string = <<<EOT
@@ -20,3 +21,10 @@ EOT;
 $events = ServerSentEvents::fromString($string);
 
 echo $events;
+
+echo ServerSentEvents::END_EVENT;
+
+$event = new Event;
+$event->event('message')->data(['message' => 'Velit libero', 'reply' => 'inprogress']);
+
+echo $event;
