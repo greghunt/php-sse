@@ -2,6 +2,7 @@
     "name": "greghunt/sse",
     "description": "A simple implementation of Server Sent Events, for reading and writing.",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "GregHunt\\ServerSentEvents\\": "src/"
