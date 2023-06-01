@@ -1,0 +1,17 @@
+{
+    "name": "greghunt/sse",
+    "description": "A simple implementation of Server Sent Events, for reading and writing.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "GregHunt\\ServerSentEvents\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Greg Hunt",
+            "email": "freshbrewedweb@gmail.com"
+        }
+    ],
+    "require": {}
+}
