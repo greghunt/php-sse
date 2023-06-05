@@ -7,7 +7,6 @@ use Iterator, JsonSerializable;
 
 class ServerSentEvents implements Iterator, JsonSerializable
 {
-    const END_EVENT = "\n\n";
     const HEADERS = [
         'Content-Type' => 'text/event-stream',
         'Cache-Control' => 'no-store',

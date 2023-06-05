@@ -7,6 +7,7 @@ use JsonSerializable;
 class Event implements JsonSerializable
 {
     const END_MESSAGE  = "\n";
+    const END_EVENT = "\n\n";
     const FIELDS = ['id', 'event', 'retry', 'data'];
 
     protected string $event;
@@ -64,7 +65,7 @@ class Event implements JsonSerializable
                 $lines[] = "$field: $val";
             }
         }
-        return implode(self::END_MESSAGE, $lines);
+        return implode(self::END_MESSAGE, $lines) . self::END_EVENT;
     }
 
     public function event(string $event): self
@@ -103,6 +104,13 @@ class Event implements JsonSerializable
     public function field()
     {
         return $this->field;
+    }
+
+    public function send()
+    {
+        echo $this;
+        ob_flush();
+        flush();
     }
 
     public static function fromString(string $string): self
