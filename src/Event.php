@@ -24,9 +24,11 @@ class Event implements JsonSerializable
 
     public function __get(string $prop)
     {
-        if (!method_exists($this, $prop)) {
+        if (isset($this->data[$prop])) {
             return $this->data[$prop];
         }
+
+        return $this->data;
     }
 
     public function toArray(): array
