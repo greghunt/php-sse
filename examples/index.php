@@ -36,6 +36,8 @@ foreach (explode("\n", $string) as $line) {
     $sse->digest($line . "\n");
 }
 
+$sse->send();
+
 print_r($sse->getLastEvent('message'));
 print_r($sse->getLastEvent('create'));
 

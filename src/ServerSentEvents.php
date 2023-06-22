@@ -22,6 +22,7 @@ class ServerSentEvents implements Iterator, JsonSerializable
     {
         $this->stream .= $str;
         $this->events = self::eventsFromString($this->stream);
+        $this->setIndex();
     }
 
     public function __toString(): string
@@ -80,11 +81,18 @@ class ServerSentEvents implements Iterator, JsonSerializable
     public function addEvent(Event $event)
     {
         $this->events[] = $event;
+        $this->setIndex();
     }
 
     public function setEvents(array $events)
     {
         $this->events = $events;
+        $this->setIndex();
+    }
+
+    private function setIndex()
+    {
+        $this->index = count($this->events) - 1;
     }
 
     public function getLastEvent(string $name): ?Event
@@ -96,6 +104,15 @@ class ServerSentEvents implements Iterator, JsonSerializable
             }
         }
         return null;
+    }
+
+    /**
+     * Sends the last current event to the buffer
+     */
+    public function send()
+    {
+        $event = $this->current();
+        $event->send();
     }
 
     public static function eventsFromString(string $string): array
