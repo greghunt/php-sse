@@ -13,12 +13,20 @@ class ServerSentEvents implements Iterator, JsonSerializable
         'Connection' => 'keep-alive',
     ];
 
+    protected string $stream = '';
+
     private array $events = [];
     private int $index = 0;
 
+    public function digest(string $str)
+    {
+        $this->stream .= $str;
+        $this->events = self::eventsFromString($this->stream);
+    }
+
     public function __toString(): string
     {
-        return implode(self::END_EVENT, array_map('strval', $this->events));
+        return implode('', array_map('strval', $this->events));
     }
 
     public function __serialize(): array
@@ -35,12 +43,6 @@ class ServerSentEvents implements Iterator, JsonSerializable
         }, $data);
 
         $this->index = 0;
-    }
-
-
-    public function addEvent(Event $event)
-    {
-        $this->events[] = $event;
     }
 
     public function current(): Event
@@ -75,21 +77,49 @@ class ServerSentEvents implements Iterator, JsonSerializable
         }, $this->events);
     }
 
-    public static function fromString(string $string): self
+    public function addEvent(Event $event)
     {
-        $sse = new self;
+        $this->events[] = $event;
+    }
+
+    public function setEvents(array $events)
+    {
+        $this->events = $events;
+    }
+
+    public function getLastEvent(string $name): ?Event
+    {
+        $events = array_reverse($this->events);
+        foreach ($events as $event) {
+            if ($event->event === $name) {
+                return $event;
+            }
+        }
+        return null;
+    }
+
+    public static function eventsFromString(string $string): array
+    {
+        $events = [];
         $rawEvents = self::parseString($string);
         foreach ($rawEvents as $rawEvent) {
             $event = Event::fromString($rawEvent);
             if ($event) {
-                $sse->addEvent($event);
+                $events[] = $event;
             }
         }
+        return $events;
+    }
+
+    public static function fromString(string $string): self
+    {
+        $sse = new self;
+        $sse->setEvents(self::eventsFromString($string));
         return $sse;
     }
 
     public static function parseString(string $string): array
     {
-        return explode(self::END_EVENT, $string);
+        return explode(Event::END_EVENT, $string);
     }
 }

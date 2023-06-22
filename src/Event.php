@@ -24,6 +24,10 @@ class Event implements JsonSerializable
 
     public function __get(string $prop)
     {
+        if (isset($this->{$prop})) {
+            return $this->{$prop};
+        }
+
         if (isset($this->data[$prop])) {
             return $this->data[$prop];
         }
@@ -118,7 +122,9 @@ class Event implements JsonSerializable
     public static function fromString(string $string): self
     {
         $event = self::parseEventString($string);
-        $event['data'] = json_decode($event['data'], true) ?? $event['data'];
+        if (isset($event['data']))
+            $event['data'] = json_decode($event['data'], true) ?? $event['data'];
+
         return new self($event);
     }
 

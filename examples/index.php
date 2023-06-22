@@ -7,24 +7,38 @@ use GregHunt\ServerSentEvents\Event;
 
 header("Content-Type: text/plain");
 $string = <<<EOT
-event: message
-data: {"message":"Velit libero","reply":"inprogress"}
+event: create
+data: function()
+
+event: create
+data: function() {
+data:   echo
+
+event: create
+data: function() {
+data:   echo "Hello World";
+
+event: create
+data: function() {
+data:   echo "Hello World";
+data: }
 
 event: message
-data: some message data
-data: appended data on line 2
+data: Created
 
-event: userconnected
-data: {"message":"user has been connected"}
+event: message
+data: Created a hello world function
 EOT;
 
-$events = ServerSentEvents::fromString($string);
+$sse = new ServerSentEvents;
 
-echo $events;
+foreach (explode("\n", $string) as $line) {
+    $sse->digest($line . "\n");
+}
 
-echo ServerSentEvents::END_EVENT;
+print_r($sse->getLastEvent('message'));
+print_r($sse->getLastEvent('create'));
 
-$event = new Event;
-$event->event('message')->data(['message' => 'Velit libero', 'reply' => 'inprogress']);
+echo json_encode($sse, JSON_PRETTY_PRINT);
 
-echo $event;
+echo $sse;
