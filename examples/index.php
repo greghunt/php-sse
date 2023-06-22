@@ -3,7 +3,6 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use GregHunt\ServerSentEvents\ServerSentEvents;
-use GregHunt\ServerSentEvents\Event;
 
 header("Content-Type: text/plain");
 $string = <<<EOT
@@ -37,10 +36,20 @@ foreach (explode("\n", $string) as $line) {
 }
 
 $sse->send();
+echo "\n";
 
-print_r($sse->getLastEvent('message'));
 print_r($sse->getLastEvent('create'));
+echo "\n";
+
+echo "GET MESSAGE DATA \n";
+print_r($sse->getLastEvent('message')->data);
+
+echo "\n";
+echo "\n";
 
 echo json_encode($sse, JSON_PRETTY_PRINT);
+
+echo "\n";
+echo "\n";
 
 echo $sse;

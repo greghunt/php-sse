@@ -18,7 +18,9 @@ class Event implements JsonSerializable
     public function __construct(array $data = [])
     {
         foreach ($data as $key => $val) {
-            $this->{$key} = $val;
+            if (in_array($key, self::FIELDS)) {
+                $this->{$key} = $val;
+            }
         }
     }
 
@@ -32,7 +34,7 @@ class Event implements JsonSerializable
             return $this->data[$prop];
         }
 
-        return $this->data;
+        return $this->data ?? '';
     }
 
     public function toArray(): array
