@@ -111,6 +111,15 @@ class ServerSentEvents implements Iterator, JsonSerializable
         return $events[0];
     }
 
+    public function getById(string $id): Event
+    {
+        $events = array_filter($this->events, function ($event) use ($id) {
+            return $event->id === $id;
+        });
+
+        return isset($events[0]) ? $events[0] : null;
+    }
+
     /**
      * Sends the last current event to the buffer
      */

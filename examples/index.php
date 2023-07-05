@@ -480,42 +480,63 @@ data:
 
 event: message
 data: 
+id: 1
 
 event: message
 data: Header
+id: 2
 
 event: message
 data: Header styling
+id: 3
 
 event: message
 data: Header styling will
+id: 4
 
 event: message
 data: Header styling will be
+id: 5
 
 event: message
 data: Header styling will be applied
+id: 6
 
 event: message
 data: Header styling will be applied from
+id: 7
 
 event: message
 data: Header styling will be applied from the
+id: 8
 
 event: message
 data: Header styling will be applied from the header
+id: 9
 
 event: message
 data: Header styling will be applied from the header-
+id: 11
 
 event: message
 data: Header styling will be applied from the header-styles
+id: 12
 
 event: message
 data: Header styling will be applied from the header-styles.css
+id: 13
+
+event: message
+data: First Header styling will be applied from the header-styles.css file
+id: 14
 
 event: message
 data: Header styling will be applied from the header-styles.css file
+id: 14
+
+event: message
+data: Last Header styling will be applied from the header-styles.css file
+id: 14
 
 EOT;
 
@@ -530,6 +551,10 @@ echo "\n";
 
 echo "GET LAST EVENT \n";
 print_r($sse->getLastEvent());
+echo "\n";
+
+echo "GET EVENT BY ID \n";
+print_r($sse->getById(14));
 echo "\n";
 
 echo "GET LAST CREATE EVENT \n";
