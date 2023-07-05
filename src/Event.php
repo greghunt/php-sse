@@ -13,7 +13,7 @@ class Event implements JsonSerializable
     protected string $event;
     protected mixed $data;
     protected int $retry;
-    protected int $id;
+    protected string $id;
 
     public function __construct(array $data = [])
     {
@@ -93,7 +93,7 @@ class Event implements JsonSerializable
         return $this;
     }
 
-    public function id(int $id): self
+    public function id(string $id): self
     {
         $this->id = $id;
         return $this;
