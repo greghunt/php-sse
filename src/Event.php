@@ -76,6 +76,11 @@ class Event implements JsonSerializable
         return implode(self::END_MESSAGE, $lines) . self::END_EVENT;
     }
 
+    public function empty()
+    {
+        return empty($this->event);
+    }
+
     public function event(string $event): self
     {
         $this->event = $event;

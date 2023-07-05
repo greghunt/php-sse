@@ -95,15 +95,20 @@ class ServerSentEvents implements Iterator, JsonSerializable
         $this->index = count($this->events) - 1;
     }
 
-    public function getLastEvent(string $name): ?Event
+    public function getLastEvent(?string $name = null): Event
     {
+        print_r($this->events);
+        die();
         $events = array_reverse($this->events);
-        foreach ($events as $event) {
-            if ($event->event === $name) {
-                return $event;
+        if ($name) {
+            foreach ($events as $event) {
+                if ($event->event === $name) {
+                    return $event;
+                }
             }
         }
-        return null;
+
+        return $events[0];
     }
 
     /**
@@ -121,7 +126,7 @@ class ServerSentEvents implements Iterator, JsonSerializable
         $rawEvents = self::parseString($string);
         foreach ($rawEvents as $rawEvent) {
             $event = Event::fromString($rawEvent);
-            if ($event) {
+            if ($event && !$event->empty()) {
                 $events[] = $event;
             }
         }
