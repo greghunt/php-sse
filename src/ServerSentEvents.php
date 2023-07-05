@@ -111,7 +111,7 @@ class ServerSentEvents implements Iterator, JsonSerializable
         return $events[0];
     }
 
-    public function getById(string $id): Event
+    public function getById(string $id): Event|null
     {
         $events = array_filter($this->events, function ($event) use ($id) {
             return $event->id === $id;
