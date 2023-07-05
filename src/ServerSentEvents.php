@@ -97,8 +97,6 @@ class ServerSentEvents implements Iterator, JsonSerializable
 
     public function getLastEvent(?string $name = null): Event
     {
-        print_r($this->events);
-        die();
         $events = array_reverse($this->events);
         if ($name) {
             foreach ($events as $event) {
@@ -117,7 +115,7 @@ class ServerSentEvents implements Iterator, JsonSerializable
             return $event->id === $id;
         });
 
-        return isset($events[0]) ? $events[0] : null;
+        return array_pop($events) ?: null;
     }
 
     /**

@@ -500,11 +500,11 @@ id: 5
 
 event: message
 data: Header styling will be applied
-id: 6
+id: e03c53dd68454be45f0e5501d6b20b23
 
 event: message
 data: Header styling will be applied from
-id: 7
+id: e03c53dd68454be45f0e5501d6b20b23
 
 event: message
 data: Header styling will be applied from the
@@ -522,21 +522,21 @@ event: message
 data: Header styling will be applied from the header-styles
 id: 12
 
+id: 13
 event: message
 data: Header styling will be applied from the header-styles.css
-id: 13
 
+id: 14
 event: message
 data: First Header styling will be applied from the header-styles.css file
-id: 14
 
+id: 14
 event: message
 data: Header styling will be applied from the header-styles.css file
-id: 14
 
+id: 14
 event: message
 data: Last Header styling will be applied from the header-styles.css file
-id: 14
 
 EOT;
 
@@ -546,6 +546,7 @@ foreach (explode("\n", $string) as $line) {
     $sse->digest($line . "\n");
 }
 
+echo "SEND LAST EVENT \n";
 $sse->send();
 echo "\n";
 
@@ -554,7 +555,7 @@ print_r($sse->getLastEvent());
 echo "\n";
 
 echo "GET EVENT BY ID \n";
-print_r($sse->getById(14));
+print_r($sse->getById("e03c53dd68454be45f0e5501d6b20b23"));
 echo "\n";
 
 echo "GET LAST CREATE EVENT \n";
