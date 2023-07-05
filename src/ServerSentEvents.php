@@ -133,7 +133,7 @@ class ServerSentEvents implements Iterator, JsonSerializable
         $rawEvents = self::parseString($string);
         foreach ($rawEvents as $rawEvent) {
             $event = Event::fromString($rawEvent);
-            if ($event && !$event->empty()) {
+            if ($event && !empty($event)) {
                 $events[] = $event;
             }
         }

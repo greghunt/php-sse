@@ -540,6 +540,11 @@ data: Last Header styling will be applied from the header-styles.css file
 
 EOT;
 
+echo "EMPTY \n";
+$sse = new ServerSentEvents;
+$sse->digest("");
+$sse->send();
+
 $sse = new ServerSentEvents;
 
 foreach (explode("\n", $string) as $line) {
