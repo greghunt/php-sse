@@ -15,8 +15,14 @@ class ServerSentEvents implements Iterator, JsonSerializable
 
     protected string $stream = '';
 
-    private array $events = [];
-    private int $index = 0;
+    private array $events;
+    private int $index;
+
+    public function __construct()
+    {
+        $this->events[] = new Event();
+        $this->index = 0;
+    }
 
     public function digest(string $str)
     {

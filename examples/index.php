@@ -541,9 +541,11 @@ data: Last Header styling will be applied from the header-styles.css file
 EOT;
 
 echo "EMPTY \n";
+$emptyEvent = <<<EOT
+EOT;
 $sse = new ServerSentEvents;
-$sse->digest("");
 $sse->send();
+print_r($sse->getLastEvent());
 
 $sse = new ServerSentEvents;
 
@@ -551,6 +553,7 @@ foreach (explode("\n", $string) as $line) {
     $sse->digest($line . "\n");
 }
 
+echo "\n";
 echo "SEND LAST EVENT \n";
 $sse->send();
 echo "\n";
