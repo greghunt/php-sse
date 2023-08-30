@@ -15,12 +15,11 @@ class ServerSentEvents implements Iterator, JsonSerializable
 
     protected string $stream = '';
 
-    private array $events;
+    private array $events = [];
     private int $index;
 
     public function __construct()
     {
-        $this->events[] = new Event();
         $this->index = 0;
     }
 
@@ -52,9 +51,9 @@ class ServerSentEvents implements Iterator, JsonSerializable
         $this->index = 0;
     }
 
-    public function current(): Event
+    public function current(): ?Event
     {
-        return $this->events[$this->index];
+        return $this->events[$this->index] ?? null;
     }
 
     public function key(): int
@@ -103,6 +102,8 @@ class ServerSentEvents implements Iterator, JsonSerializable
 
     public function getLastEvent(?string $name = null): ?Event
     {
+        if (empty($this->events)) return null;
+
         $events = array_reverse($this->events);
 
         if (!$name)
@@ -133,8 +134,9 @@ class ServerSentEvents implements Iterator, JsonSerializable
      */
     public function send()
     {
-        $event = $this->current();
-        $event->send();
+        if ($event = $this->current()) {
+            $event->send();
+        }
     }
 
     public static function eventsFromString(string $string): array
