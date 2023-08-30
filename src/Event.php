@@ -12,8 +12,8 @@ class Event implements JsonSerializable
 
     protected string $event;
     protected mixed $data;
-    protected int $retry;
-    protected string $id;
+    protected ?int $retry;
+    protected ?string $id;
 
     public function __construct(array $data = [])
     {
@@ -56,9 +56,9 @@ class Event implements JsonSerializable
     public function __unserialize(array $data): void
     {
         $this->event = $data['event'];
-        $this->id = $data['id'];
-        $this->retry = $data['retry'];
-        $this->data = $data['data'];
+        $this->id = $data['id'] ?? null;
+        $this->retry = $data['retry'] ?? null;
+        $this->data = $data['data'] ?? null;
     }
 
     public function __toString()
