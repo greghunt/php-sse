@@ -3,7 +3,6 @@
     "description": "A simple implementation of Server Sent Events, for reading and writing.",
     "type": "library",
     "license": "MIT",
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "GregHunt\\ServerSentEvents\\": "src/"
